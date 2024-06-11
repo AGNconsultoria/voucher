@@ -28,7 +28,7 @@ class GeneratePDF {
           marginRight: 1,
           marginTop: 1,
         ),
-        maxPages: 999,
+        // maxPages: listaDeVouchers.length,
         build: (context) => [
           _contentTable(context),
         ],
@@ -61,36 +61,39 @@ class GeneratePDF {
       ),
       tableWidth: pw.TableWidth.min,
       children: [
-        for (int i = 0; i < listaDeVouchers.length; i++) // Ajuste o número de iterações conforme necessário
+        for (int i = 0; i < listaDeVouchers.length; i += 6)
           pw.TableRow(
             children: [
-              for (int j = 0; j < 6; j++) // Cria 6 colunas
-                pw.Padding(
-                  padding: const pw.EdgeInsets.all(5),
-                  child: pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Row(
-                        children: [
-                          titulo("Rede:"),
-                          corpo(rede),
-                        ],
-                      ),
-                      pw.Row(
-                        children: [
-                          titulo("Senha:"),
-                          corpo(senha),
-                        ],
-                      ),
-                      pw.Row(
-                        children: [
-                          titulo("Voucher:"),
-                          corpo(listaDeVouchers[i]),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              for (int j = 0; j < 6; j++)
+                if (i + j < listaDeVouchers.length)
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.all(5),
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Row(
+                          children: [
+                            titulo("Rede:"),
+                            corpo(rede),
+                          ],
+                        ),
+                        pw.Row(
+                          children: [
+                            titulo("Senha:"),
+                            corpo(senha),
+                          ],
+                        ),
+                        pw.Row(
+                          children: [
+                            titulo("Voucher:"),
+                            corpo(listaDeVouchers[i + j]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  pw.Container(), // Preenchimento vazio para células que não têm voucher
             ],
           ),
       ],

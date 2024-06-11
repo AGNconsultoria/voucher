@@ -23,7 +23,7 @@ class _ConfigPageState extends State<ConfigPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: loading
-          ? const CircularProgressIndicator()
+          ? const SizedBox.shrink()
           : FloatingActionButton(
               onPressed: () => floatingActionButton(),
               child: const Icon(
@@ -108,6 +108,21 @@ class _ConfigPageState extends State<ConfigPage> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: loading,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    top: 20,
+                  ),
+                  child: Text(
+                    " Processando o arquivo para gerar os vouchers ",
+                    style: TextStyle(
+                      backgroundColor: Colors.orangeAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -163,9 +178,11 @@ class _ConfigPageState extends State<ConfigPage> {
             linhaNumero++;
             if (!linha[0].toString().trim().contains("#") || linha[0].toString().trim().contains("#").toString().isEmpty) {
               if (linha[0].toString().trim().length > 18) {
-                throw "Erro: voucher muito grande, linha: $linhaNumero";
+                throw "Erro: voucher muito grande, linha: $linhaNumero maximo: 18";
               }
-              listaDeVouchers.add(linha[0].toString().trim());
+              if (linha[0].toString().trim().isNotEmpty) {
+                listaDeVouchers.add(linha[0].toString().trim());
+              }
             }
           }
           if (listaDeVouchers.isNotEmpty) {
