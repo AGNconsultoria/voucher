@@ -7,7 +7,9 @@ void main() async {
 
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(500, 500),
+    size: Size(500, 450),
+    maximumSize: Size(500, 450),
+    minimumSize: Size(500, 450),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Generate vouchers',
+      title: 'Gerador de vouchers',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

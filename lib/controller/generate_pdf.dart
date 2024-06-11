@@ -17,7 +17,6 @@ class GeneratePDF {
     required this.listaDeVouchers,
   });
 
-  /// Cria e Imprime a fatura
   generatePDFInvoice() async {
     final pw.Document doc = pw.Document(version: PdfVersion.pdf_1_5, compress: false, pageMode: PdfPageMode.fullscreen);
 

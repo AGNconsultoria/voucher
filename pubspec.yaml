@@ -1,5 +1,5 @@
 name: vouchers
-description: "A new Flutter project."
+description: "Gerador de Vouchers."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -25,17 +25,16 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.0
-  flutter_launcher_icons: ^0.13.1
+  icons_launcher: ^2.1.7
 
-flutter_launcher_icons:
+
+icons_launcher:
   image_path: "assets/logo.jpg"
-  windows:
-    enable: true
-    image_path: "assets/logo.jpg"
-    icon_size: 48
-  web:
-    enable: true
-    image_path: "assets/logo.jpg"
+  platforms:
+    windows:
+      enable: true
+    web:
+      enable: true
 
 flutter:
   uses-material-design: true
