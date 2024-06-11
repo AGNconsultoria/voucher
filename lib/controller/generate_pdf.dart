@@ -28,6 +28,7 @@ class GeneratePDF {
           marginRight: 1,
           marginTop: 1,
         ),
+        maxPages: 999,
         build: (context) => [
           _contentTable(context),
         ],
