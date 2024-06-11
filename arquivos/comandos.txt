@@ -1,0 +1,19 @@
+Criar APK 
+    para x86:
+        flutter build apk --release --target-platform=android-arm
+
+    para x64
+        flutter build apk --release --target-platform=android-arm64
+
+    Para loja 
+        flutter build appbundle
+
+    para Web
+        flutter build web --release
+
+Mobx
+    dart run build_runner watch
+
+Criar ICON
+    flutter pub get
+    dart run icons_launcher:create
