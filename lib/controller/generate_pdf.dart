@@ -115,7 +115,7 @@ class GeneratePDF {
   corpo(nome) {
     return pw.Text(
       nome,
-      style: pw.TextStyle(
+      style: const pw.TextStyle(
         fontWeight: pw.FontWeight.bold,
         fontSize: 9.5,
       ),

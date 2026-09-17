@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class _ConfigPageState extends State<ConfigPage> {
   final _formKey = GlobalKey<FormState>();
   final nomedaRede = TextEditingController(text: "");
   final senha = TextEditingController(text: "");
-  FilePickerResult arquivoCSV = const FilePickerResult([]);
+  PlatformFile? arquivoCSV;
   bool loading = false;
 
   @override
@@ -98,12 +97,12 @@ class _ConfigPageState extends State<ConfigPage> {
                   onPressed: () => lerArquivo(),
                   icon: const Icon(Icons.folder_open),
                   label: Center(
-                    child: arquivoCSV.count == 0
+                    child: arquivoCSV == null
                         ? const Text(
                             "Escolher os arquivos de voucher",
                           )
                         : Text(
-                            "Arquivo: ${arquivoCSV.files.first.name}",
+                            "Arquivo: ${arquivoCSV!.name}",
                           ),
                   ),
                 ),
@@ -131,46 +130,36 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   lerArquivo() async {
-    arquivoCSV = (await FilePicker.platform.pickFiles(
+    final arquivo = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['csv'],
-      allowMultiple: false,
-      withData: true,
-      lockParentWindow: true,
-    ))!;
-    setState(() {});
+      windowsOptions: const WindowsOptions(lockParentWindow: true),
+    );
+    if (arquivo != null) {
+      setState(() {
+        arquivoCSV = arquivo;
+      });
+    }
   }
 
   floatingActionButton() async {
     if (_formKey.currentState!.validate()) {
-      if (arquivoCSV.files.isEmpty) {
+      if (arquivoCSV?.path == null) {
         scaffoldMessenger(message: "Arquivo não selecionado", erro: true);
       } else {
         try {
           setState(() {
             loading = true;
           });
-          var arquivo = File(arquivoCSV.paths[0].toString()).openRead();
-          var csv = await arquivo
-              .transform(utf8.decoder)
-              .transform(
-                const CsvToListConverter(
-                  fieldDelimiter: ' ',
-                  eol: '\n',
-                ),
-              )
-              .toList();
+          final textoCsv = await File(arquivoCSV!.path!).readAsString();
+          var csv = const CsvDecoder(
+            fieldDelimiter: ' ',
+          ).convert(textoCsv);
           if (csv.isNotEmpty && csv.first.toString().contains(";")) {
             // Caso o arquivo tenha editado usuario ele tem de lindo assim
-            arquivo = File(arquivoCSV.paths[0].toString()).openRead();
-            csv = await arquivo
-                .transform(utf8.decoder)
-                .transform(
-                  const CsvToListConverter(
-                    fieldDelimiter: ';',
-                  ),
-                )
-                .toList();
+            csv = const CsvDecoder(
+              fieldDelimiter: ';',
+            ).convert(textoCsv);
           }
           List<String> listaDeVouchers = [];
           int linhaNumero = 0; // Inicializando o número da linha
@@ -228,6 +217,6 @@ class _ConfigPageState extends State<ConfigPage> {
   limpar() {
     nomedaRede.text = "";
     senha.text = "";
-    arquivoCSV = const FilePickerResult([]);
+    arquivoCSV = null;
   }
 }
